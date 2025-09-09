@@ -16,7 +16,11 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
   {
     plugins: { prettier: prettierPlugin },
-    rules: { 'prettier/prettier': 'error' },
+    rules: {
+      'prettier/prettier': 'error',
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+    },
   },
   { ignores: ['node_modules', 'eslint.config.mjs', '**/dist', 'config/*'] },
 ])
