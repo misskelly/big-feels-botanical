@@ -6,8 +6,8 @@ import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
-import { baseUrl } from './sitemap'
 
+const baseUrl = 'https://bigfeelsbotanical.com'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -23,20 +23,13 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+interface Cx {
+  (...classes: (string | undefined | null | false)[]): string
+}
+
+const cx: Cx = (...classes) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,
@@ -49,7 +42,7 @@ export default function RootLayout({
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
         GeistSans.variable,
-        GeistMono.variable
+        GeistMono.variable,
       )}
     >
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
