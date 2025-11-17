@@ -5,9 +5,9 @@ import { GeistMono } from 'geist/font/mono'
 import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import { baseUrl } from './sitemap'
-import { Footer } from './components/footer'
+import Footer from './components/footer'
 
+const baseUrl = 'https://bigfeelsbotanical.com'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
@@ -23,21 +23,10 @@ export const metadata: Metadata = {
     locale: 'en_US',
     type: 'website',
   },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
 }
 
 interface Cx {
-  (...classes: (string | false | null | undefined)[]): string
+  (...classes: (string | undefined | null | false)[]): string
 }
 
 const cx: Cx = (...classes) => classes.filter(Boolean).join(' ')
