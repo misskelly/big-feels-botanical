@@ -5,21 +5,21 @@ import { GeistMono } from 'geist/font/mono'
 import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
-import Footer from './components/footer'
 import { baseUrl } from './sitemap'
+import { Footer } from './components'
 
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Big Feels Botanical',
+    template: '%s | Kelly Zick',
   },
-  description: 'This is my portfolio.',
+  description: 'Feelings help us grow.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Big Feels Botanical',
+    description: 'Flowers and feelings.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Big Feels Botanical',
     locale: 'en_US',
     type: 'website',
   },
@@ -36,7 +36,11 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+interface Cx {
+  (...classes: (string | false | null | undefined)[]): string
+}
+
+const cx: Cx = (...classes) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,
@@ -49,7 +53,7 @@ export default function RootLayout({
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
         GeistSans.variable,
-        GeistMono.variable
+        GeistMono.variable,
       )}
     >
       <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">

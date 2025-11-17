@@ -1,15 +1,13 @@
-import { Storage } from '@google-cloud/storage'
 import admin from 'firebase-admin'
-import path from 'path'
-import fs from 'fs'
+import { Storage } from '@google-cloud/storage'
+import { readFileSync } from 'fs'
 
-// Configuration from env
 const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS
 const bucketName =
   process.env.FIREBASE_STORAGE_BUCKET ||
   process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
 const collectionName = process.env.FIRESTORE_COLLECTION || 'images'
-const prefix = process.env.STORAGE_PREFIX || '' // folder prefix in storage to list
+const prefix = process.env.STORAGE_PREFIX || ''
 
 if (!keyPath) {
   console.error(
@@ -17,74 +15,81 @@ if (!keyPath) {
   )
   process.exit(1)
 }
-
 if (!bucketName) {
   console.error(
-    'FIREBASE_STORAGE_BUCKET (or NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET) environment variable is required.',
+    'FIREBASE_STORAGE_BUCKET or NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET environment variable is required.',
   )
   process.exit(1)
 }
 
-async function main() {
-  // read service account JSON
-  let serviceAccount: Record<string, unknown>
-  try {
-    // keyPath was validated earlier; assert non-null for the fs call
-    const raw = fs.readFileSync(keyPath as string, 'utf8')
-    serviceAccount = JSON.parse(raw) as Record<string, unknown>
-  } catch (err) {
-    console.error('Failed to read or parse service account JSON:', err)
-    process.exit(1)
-  }
+// Read service account
+const serviceAccount = JSON.parse(readFileSync(keyPath, 'utf8')) as Record<
+  string,
+  unknown
+>
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    storageBucket: bucketName,
-  })
+// Initialize Firebase Admin
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
+  storageBucket: bucketName,
+})
 
-  const db = admin.firestore()
-  const gcs = new Storage({ keyFilename: keyPath })
-  const bucket = gcs.bucket(bucketName as string)
+const db = admin.firestore()
+const storage = new Storage({ keyFilename: keyPath })
+const bucket = storage.bucket(bucketName)
 
-  console.log(`Listing objects in gs://${bucketName}/${prefix}`)
+async function importImages() {
+  console.log(`Listing files in gs://${bucketName}/${prefix}`)
   const [files] = await bucket.getFiles({ prefix })
 
-  console.log(`Found ${files.length} files`)
+  console.log(
+    `Found ${files.length} files. Importing to '${collectionName}'...`,
+  )
 
   for (const file of files) {
+    // Skip folders
+    if (file.name.endsWith('/')) {
+      console.log(`⊘ Skipping folder: ${file.name}`)
+      continue
+    }
+
     try {
-      // skip folders
-      if (file.name.endsWith('/')) continue
+      const [metadata] = await file.getMetadata()
 
-      const publicUrl = `https://storage.googleapis.com/${bucketName}/${encodeURI(file.name)}`
+      // Generate signed URL (valid for 1 year)
+      const [signedUrl] = await file.getSignedUrl({
+        action: 'read',
+        expires: Date.now() + 365 * 24 * 60 * 60 * 1000, // 1 year
+      })
 
-      // get metadata
-      const [meta] = await file.getMetadata()
-      const doc = {
-        name: path.basename(file.name),
+      const docId = Buffer.from(file.name).toString('base64url')
+      const docData = {
+        name: metadata.name || file.name,
         path: file.name,
-        size: parseInt(String(meta.size ?? '0'), 10),
-        contentType: meta.contentType || null,
-        updated: meta.updated ? new Date(meta.updated) : null,
-        md5Hash: meta.md5Hash || null,
-        crc32c: meta.crc32c || null,
-        publicUrl,
+        size: metadata.size ? Number(metadata.size) : 0,
+        contentType: metadata.contentType || null,
+        updated: metadata.updated
+          ? admin.firestore.Timestamp.fromDate(new Date(metadata.updated))
+          : null,
+        md5Hash: metadata.md5Hash || null,
+        crc32c: metadata.crc32c || null,
+        publicUrl: signedUrl,
         storageBucket: bucketName,
       }
 
-      // Write to Firestore using path-safe doc id (base64url of file path)
-      const docId = Buffer.from(file.name).toString('base64url')
-      const ref = db.collection(collectionName).doc(docId)
-
-      await ref.set(doc, { merge: true })
-      console.log(`Imported ${file.name} -> ${collectionName}/${docId}`)
+      await db.collection(collectionName).doc(docId).set(docData)
+      console.log(`✓ Imported: ${file.name}`)
     } catch (err) {
-      console.error(`Failed to import ${file.name}:`, err)
+      console.error(`✗ Failed to import ${file.name}:`, err)
     }
   }
+
+  console.log('Import complete.')
 }
 
-main().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})
+importImages()
+  .then(() => process.exit(0))
+  .catch((err) => {
+    console.error('Import failed:', err)
+    process.exit(1)
+  })
