@@ -16,6 +16,11 @@ export default defineConfig([
   pluginReact.configs.flat.recommended,
   {
     plugins: { prettier: prettierPlugin },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
     rules: {
       'prettier/prettier': 'error',
       'react/react-in-jsx-scope': 'off',

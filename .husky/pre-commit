@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# Run lint-staged (ESLint + Prettier on staged files)
+pnpm lint-staged

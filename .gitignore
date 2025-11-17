@@ -28,6 +28,14 @@ yarn-error.log*
 
 # env files
 .env
+.env.*
+!.env.example
+
+# firebase service accounts and sensitive config
+*-sa.json
+serviceAccountKey.json
+firebase-adminsdk-*.json
+.config/firebase
 
 # vercel
 .vercel
@@ -35,3 +43,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
