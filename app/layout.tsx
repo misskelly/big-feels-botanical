@@ -11,15 +11,15 @@ const baseUrl = 'https://bigfeelsbotanical.com'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Big Feels Botanical',
+    template: '%s | Kelly Zick',
   },
-  description: 'This is my portfolio.',
+  description: 'Feelings help us grow.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Big Feels Botanical',
+    description: 'Flowers and feelings.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Big Feels Botanical',
     locale: 'en_US',
     type: 'website',
   },
@@ -45,14 +45,14 @@ export default function RootLayout({
         GeistMono.variable,
       )}
     >
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
-        <main className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0">
+      <body className="antialiased">
+        <div className="flex-auto min-w-0 mt-6 flex flex-col min-h-screen">
           <Navbar />
           {children}
           <Footer />
           <Analytics />
           <SpeedInsights />
-        </main>
+        </div>
       </body>
     </html>
   )
