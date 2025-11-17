@@ -1,7 +1,9 @@
 import admin from 'firebase-admin'
 import { Storage } from '@google-cloud/storage'
 import { readFileSync } from 'fs'
+import { resolve } from 'path'
 
+// Configuration from env
 const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS
 const bucketName =
   process.env.FIREBASE_STORAGE_BUCKET ||
@@ -22,11 +24,13 @@ if (!bucketName) {
   process.exit(1)
 }
 
+// Resolve relative path from project root
+const resolvedKeyPath = resolve(process.cwd(), keyPath)
+
 // Read service account
-const serviceAccount = JSON.parse(readFileSync(keyPath, 'utf8')) as Record<
-  string,
-  unknown
->
+const serviceAccount = JSON.parse(
+  readFileSync(resolvedKeyPath, 'utf8'),
+) as Record<string, unknown>
 
 // Initialize Firebase Admin
 admin.initializeApp({
