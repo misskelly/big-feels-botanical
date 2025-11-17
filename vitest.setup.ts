@@ -12,12 +12,12 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }))
 
-vi.mock('lib/firebase', () => ({
-  db: {},
-  storage: {},
-  analytics: null,
-  app: {},
-}))
+// vi.mock('lib/firebase', () => ({
+//   db: {},
+//   storage: {},
+//   analytics: null,
+//   app: {},
+// }))
 
 global.ResizeObserver = vi.fn().mockImplementation(() => ({
   observe: vi.fn(),
@@ -26,5 +26,5 @@ global.ResizeObserver = vi.fn().mockImplementation(() => ({
 }))
 
 afterEach(() => {
-  vi.clearAllMocks()
+  vi.restoreAllMocks()
 })
