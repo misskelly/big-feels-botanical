@@ -11,15 +11,15 @@ const baseUrl = 'https://bigfeelsbotanical.com'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: 'Big Feels Botanical | Seed to Soul Floral and Garden Design',
+    template: '%s | Big Feels Botanical',
   },
-  description: 'This is my portfolio.',
+  description: 'Seed to Soul Floral and Garden Design.',
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
+    title: 'Big Feels Botanical',
+    description: 'Seed to Soul Floral and Garden Design.',
     url: baseUrl,
-    siteName: 'My Portfolio',
+    siteName: 'Big Feels Botanical',
     locale: 'en_US',
     type: 'website',
   },
