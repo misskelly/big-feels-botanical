@@ -52,7 +52,7 @@
     "typescript-eslint": "^8.56.0",
     "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.22.0+sha512.bf049efe995b28f527fd2b41ae0474ce29186f7edcb3bf545087bd61fbbebb2bf75362d1307fda09c2d288e1e499787ac12d4fcb617a974718a6051f2eee741c",
+  "packageManager": "pnpm@11.2.2+sha512.36e6621fad506178936455e70247b8808ef4ec25797a9f437a93281a020484e2607f6a469a22e982987c3dbb8866e3071514ab10a4a1749e06edcd1ec118436f",
   "lint-staged": {
     "*.{js,jsx,ts,tsx,mts}": [
       "eslint --fix",
