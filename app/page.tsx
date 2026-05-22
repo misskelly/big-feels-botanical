@@ -1,20 +1,9 @@
+import Image from 'next/image'
 import { Display, Heading, Body, Eyebrow, Caption } from '@/app/components/ui'
+import { getGalleryImages } from '@/lib/gallery'
 
-/**
- * Example homepage demonstrating all typography components
- * in a real Big Feels Botanical page layout.
- *
- * Accessibility features:
- * - Skip link (first focusable element)
- * - Semantic landmark structure (header, nav, main, footer)
- * - Single h1, logical heading hierarchy
- * - aria-label on duplicate nav landmarks
- * - aria-current="page" on active nav link
- * - All content inside landmarks
- * - max-width on body text for readable line length
- */
-
-export default function HomePage() {
+export default async function HomePage() {
+  const images = await getGalleryImages(6)
   return (
     <>
       <main id="main-content">
@@ -68,24 +57,23 @@ export default function HomePage() {
               with care, and let the botanicals lead.
             </Body>
 
-            {/* Placeholder grid — replace with real arrangement cards */}
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {['Winter Solstice', 'Dried Meadow', 'Spring Forward'].map(
-                (name) => (
-                  <article
-                    key={name}
-                    className="overflow-hidden rounded-xl border border-border bg-surface-card"
-                  >
-                    <div className="aspect-[4/5] bg-surface-warm" />
-                    <div className="p-5">
-                      <Heading level={3} className="mb-1">
-                        {name}
-                      </Heading>
-                      <Caption as="p">Fresh &amp; dried · Seasonal</Caption>
-                    </div>
-                  </article>
-                ),
-              )}
+              {images.map((image) => (
+                <article
+                  key={image.id}
+                  className="overflow-hidden rounded-xl border border-border bg-surface-card"
+                >
+                  <div className="relative aspect-[4/5]">
+                    <Image
+                      src={image.url}
+                      alt={image.name}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </div>
+                </article>
+              ))}
             </div>
           </div>
         </section>
