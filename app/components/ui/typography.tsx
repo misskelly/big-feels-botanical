@@ -92,7 +92,7 @@ export function Heading<E extends ElementType = 'h1'>({
   const style = headingStyles[visualLevel ?? level]
 
   return (
-    <Tag className={`${style} text-ink ${className}`} {...rest}>
+    <Tag className={`${style} text-ink ${className ?? ''}`} {...rest}>
       {children}
     </Tag>
   )
@@ -172,7 +172,7 @@ export function Body<E extends ElementType = 'p'>({
   const Tag = as ?? ('p' as ElementType)
 
   return (
-    <Tag className={`${bodyStyles[variant]} ${className}`} {...rest}>
+    <Tag className={`${bodyStyles[variant]} ${className ?? ''}`} {...rest}>
       {children}
     </Tag>
   )

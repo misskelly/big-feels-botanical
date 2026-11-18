@@ -1,5 +1,6 @@
 import './global.css'
 import type { Metadata } from 'next'
+import { Fraunces } from 'next/font/google'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from './components/nav'
@@ -7,6 +8,13 @@ import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { SkipLink } from './components/ui'
+
+const fraunces = Fraunces({
+  subsets: ['latin'],
+  axes: ['opsz', 'SOFT', 'WONK'],
+  variable: '--font-fraunces',
+  display: 'swap',
+})
 
 const baseUrl = 'https://bigfeelsbotanical.com'
 export const metadata: Metadata = {
@@ -41,23 +49,21 @@ export default function RootLayout({
     <html
       lang="en"
       className={cx(
-        'text-black bg-white dark:text-white dark:bg-black',
+        'bg-surface text-ink',
+        fraunces.variable,
         GeistSans.variable,
         GeistMono.variable,
       )}
     >
-      <body className="antialiased max-w-xl mx-4 mt-8 lg:mx-auto">
+      <body className="flex min-h-screen flex-col font-body antialiased">
         <SkipLink />
         <Navbar />
-        <main
-          id="main-content"
-          className="flex-auto min-w-0 mt-6 flex flex-col px-2 md:px-0"
-        >
+        <main id="main-content" className="flex-auto">
           {children}
-          <Footer />
-          <Analytics />
-          <SpeedInsights />
         </main>
+        <Footer />
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )

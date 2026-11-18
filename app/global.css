@@ -1,5 +1,69 @@
 @import 'tailwindcss';
 
+/* ── Design tokens ─────────────────────────────────────────────
+   Colors are defined once as CSS variables (light + dark) and
+   exposed to Tailwind as `bg-surface`, `text-ink`, `border-border`,
+   `font-display`, etc. */
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
+  --font-body: var(--font-geist-sans), system-ui, sans-serif;
+
+  --color-surface: var(--surface);
+  --color-surface-warm: var(--surface-warm);
+  --color-surface-card: var(--surface-card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-muted: var(--ink-muted);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-accent: var(--accent);
+}
+
+:root {
+  --surface: #faf8f4;
+  --surface-warm: #f2ede4;
+  --surface-card: #ffffff;
+  --ink: #1c1a17;
+  --ink-soft: #45413b;
+  --ink-muted: #6b665e;
+  --border: #d9d2c5;
+  --border-soft: #e9e4d9;
+  --accent: #8a3f55;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #0d0d0c;
+    --surface-warm: #171614;
+    --surface-card: #1c1b19;
+    --ink: #f4f1ea;
+    --ink-soft: #cfcac0;
+    --ink-muted: #a39e94;
+    --border: #34312c;
+    --border-soft: #24221f;
+    --accent: #e3a3b5;
+  }
+}
+
+/* Visually hidden until focused, then pinned top-left. */
+.skip-link {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 50;
+  transform: translateY(-200%);
+  border-radius: 0.5rem;
+  background-color: var(--ink);
+  color: var(--surface);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
 ::selection {
   background-color: #47a3f3;
   color: #fefefe;

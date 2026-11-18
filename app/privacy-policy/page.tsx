@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { Heading } from '@/app/components/ui'
 
 export const metadata = {
   title: 'Privacy Policy',
@@ -7,9 +8,11 @@ export const metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="space-y-8">
+    <div className="mx-auto max-w-3xl space-y-8 px-6 py-12 md:py-16">
       <section aria-labelledby="privacy-heading">
-        <h1 id="privacy-heading">Privacy Policy</h1>
+        <Heading level={1} id="privacy-heading">
+          Privacy Policy
+        </Heading>
 
         <div className="my-8">
           <Image
@@ -17,7 +20,7 @@ export default function PrivacyPolicyPage() {
             alt="Big Feels Botanical logo"
             width={200}
             height={200}
-            className="mx-auto"
+            className="mx-auto dark:invert"
             priority
           />
         </div>

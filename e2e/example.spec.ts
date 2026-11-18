@@ -3,15 +3,43 @@ import { test, expect } from '@playwright/test'
 test('homepage loads and displays heading', async ({ page }) => {
   await page.goto('/')
 
-  // Check that the main heading is visible
   await expect(
-    page.getByRole('heading', { name: 'Big Feels Botanical' }),
+    page.getByRole('heading', { level: 1, name: 'Big Feels Botanical' }),
   ).toBeVisible()
 })
 
-test('homepage displays welcome message', async ({ page }) => {
+test('homepage displays the featured and about sections', async ({ page }) => {
   await page.goto('/')
 
-  // Check that the welcome message is present
-  await expect(page.getByText('Pretty things coming soon!')).toBeVisible()
+  await expect(
+    page.getByRole('heading', { name: 'Seasonal Arrangements' }),
+  ).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'The Story' })).toBeVisible()
+})
+
+test('nav links to the gallery', async ({ page }) => {
+  await page.goto('/')
+
+  await page
+    .getByRole('navigation', { name: 'Main navigation' })
+    .getByRole('link', { name: 'gallery' })
+    .click()
+
+  await expect(page).toHaveURL(/\/gallery$/)
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Gallery' }),
+  ).toBeVisible()
+})
+
+test('footer links to the privacy policy', async ({ page }) => {
+  await page.goto('/')
+
+  await page
+    .getByRole('navigation', { name: 'Footer' })
+    .getByRole('link', { name: 'Privacy Policy' })
+    .click()
+
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Privacy Policy' }),
+  ).toBeVisible()
 })

@@ -1,45 +1,50 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 
 const navItems = {
   '/': {
     name: 'home',
   },
-  '/about': {
-    name: 'about',
+  '/gallery': {
+    name: 'gallery',
   },
 }
 
 export function Navbar() {
+  const pathname = usePathname()
+
   return (
     <header className="border-b border-border-soft">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <a
+        <Link
           href="/"
           aria-label="Big Feels Botanical home"
-          className="flex font-display text-xl font-semibold"
+          className="flex items-center font-display text-xl font-semibold"
         >
           <Image
             src="/images/heart-only-logo-bw.svg"
-            alt="Big Feels Botanical"
+            alt=""
             width={50}
             height={50}
-            className="brightness-0 invert pr-2"
+            className="pr-2 brightness-0 dark:invert"
           />
           Big Feels Botanical
-        </a>
-        <nav
-          className="flex flex-row items-end relative px-0 pb-2 fade md:overflow-auto scroll-pr-6 md:relative"
-          id="nav"
-        >
-          <ul className="flex flex-row space-x-0 pr-10">
+        </Link>
+        <nav aria-label="Main navigation">
+          <ul className="flex flex-row">
             {Object.entries(navItems).map(([path, { name }]) => {
+              const isActive = pathname === path
               return (
                 <li key={path} className="list-none">
                   <Link
-                    key={path}
                     href={path}
-                    className="transition-all hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative py-1 px-2 m-1"
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`relative m-1 flex px-2 py-1 align-middle transition-colors hover:text-ink ${
+                      isActive ? 'font-semibold text-ink' : 'text-ink-muted'
+                    }`}
                   >
                     {name}
                   </Link>

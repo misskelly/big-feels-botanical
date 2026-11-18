@@ -4,6 +4,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "import-images": "node --env-file=.env --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/import-storage-to-firestore.ts",
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",

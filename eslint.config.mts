@@ -12,6 +12,10 @@ export default defineConfig([
     extends: ['js/recommended'],
     languageOptions: { globals: globals.browser },
   },
+  {
+    files: ['**/*.cjs'],
+    languageOptions: { globals: globals.node },
+  },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
   {
@@ -27,5 +31,16 @@ export default defineConfig([
       'react/prop-types': 'off',
     },
   },
-  { ignores: ['node_modules', 'eslint.config.mjs', '**/dist', 'config/*'] },
+  {
+    ignores: [
+      'node_modules',
+      'eslint.config.mjs',
+      '**/dist',
+      'config/*',
+      '.next',
+      'next-env.d.ts',
+      'playwright-report',
+      'test-results',
+    ],
+  },
 ])
